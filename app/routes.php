@@ -19,7 +19,7 @@ Route::group(array('prefix' => 'users'), function() {
 
         Route::get('/', 'UsersController@show');
 
-        Route::group(['prefix' => '/todos', 'before' => 'auth.token'], function() {
+        Route::group(['prefix' => '/todos'], function() {
 
             Route::get('/', 'TodosController@index');
             Route::post('/', 'TodosController@store');
