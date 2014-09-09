@@ -40,7 +40,7 @@ Route::post('login', function() {
     {
         $authToken = AuthToken::create(Auth::user());
         $publicToken = AuthToken::publicToken($authToken);
-        return Response::make(json_encode(['auth_token' => $publicToken]), 200);
+        return Response::make(json_encode(['user_id' => Auth::user()->id,'auth_token' => $publicToken]), 200);
     } else {
         return Response::make(json_encode(['message' => 'Login attempt failed.']), 400);
     }

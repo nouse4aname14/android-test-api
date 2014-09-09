@@ -42,7 +42,7 @@ class UsersController extends \BaseController {
             {
                 $authToken = AuthToken::create(Auth::user());
                 $publicToken = AuthToken::publicToken($authToken);
-                return Response::make(json_encode(['user' => $user, 'auth_token' => $publicToken]), 200);
+                return Response::make(json_encode(['user_id' => $user->id, 'auth_token' => $publicToken]), 200);
             }
 
         } else {
