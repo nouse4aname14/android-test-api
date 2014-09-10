@@ -11,7 +11,7 @@ class TodosController extends \BaseController {
 	 */
 	public function index($userId)
 	{
-        return Todo::where('user_id', '=', $userId)->get();
+        return Todo::where('user_id', '=', $userId)->orderBy('id', 'DESC')->get();
 	}
 
 	/**
