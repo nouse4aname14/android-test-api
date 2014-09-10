@@ -25,19 +25,20 @@ class TodosController extends \BaseController {
 	{
         $input = Input::all();
         $validator = Validator::make($input, [
-            'title' => 'required',
-            'description' => 'required'
+            'title' => 'required'
         ]);
+
+        $description = isset($input['description']) ? $input['description'] : '';
 
         if (!$validator->fails()) {
             $todo = new Todo();
             $todo->user_id = $userId;
             $todo->title = $input['title'];
-            $todo->description = $input['description'];
+            $todo->description = $description;
             $todo->save();
             return Response::make(json_encode($todo), 200);
         } else {
-            return Response::make(json_encode(['message' => 'The inputs name and description are required.']), 400);
+            return Response::make(json_encode(['message' => 'The input title is required.']), 400);
         }
 	}
 
