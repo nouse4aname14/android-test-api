@@ -3,10 +3,12 @@ namespace Api\Controllers;
 
 use Api\Models\User;
 use Company\Interfaces\User\UserRepositoryInterface;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use Tappleby\Support\Facades\AuthToken;
 
 /**
  * Class UsersController
@@ -66,8 +68,11 @@ class UsersController extends \BaseController
             $user->email = $input['email'];
             $user->password = Hash::make($input['password']);
             $user->save();
-
-            return Response::make(json_encode(['user_id' => $user->id]), 201);
+            if (Auth::attempt(['email' => $input['email'], 'password' => $input['password']])) {
+                $authToken = AuthToken::create(Auth::user());
+                $publicToken = AuthToken::publicToken($authToken);
+                return Response::make(json_encode(['user_id' => $user->id, 'auth_token' => $publicToken]), 201);
+            }
         }
 
         return Response::make(json_encode(['message' => 'The inputs email, which must be a unique valid email, and password are required.']), 400);
