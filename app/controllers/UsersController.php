@@ -67,7 +67,7 @@ class UsersController extends \BaseController
             $user->password = Hash::make($input['password']);
             $user->save();
 
-            return Response::make(json_encode(['user_id' => $user->id]), 200);
+            return Response::make(json_encode(['user_id' => $user->id]), 201);
         }
 
         return Response::make(json_encode(['message' => 'The inputs email, which must be a unique valid email, and password are required.']), 400);

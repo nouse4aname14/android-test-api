@@ -63,7 +63,7 @@ class TodosController extends \BaseController
             $todo->title = $input['title'];
             $todo->description = $description;
             $todo->save();
-            return Response::make(json_encode($todo), 200);
+            return Response::make(json_encode($todo), 201);
         } else {
             return Response::make(json_encode(['message' => 'The input title is required.']), 400);
         }
