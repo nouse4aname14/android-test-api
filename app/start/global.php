@@ -66,6 +66,9 @@ Event::listen('auth.token.created', function($user, $token)
     $user->load('relation1', 'relation2');
 });
 
+App::bind('Company\Interfaces\User\UserRepositoryInterface', 'Company\Repositories\User\UserRepository');
+App::bind('Company\Interfaces\Todo\TodoRepositoryInterface', 'Company\Repositories\Todo\TodoRepository');
+
 /*
 |--------------------------------------------------------------------------
 | Maintenance Mode Handler

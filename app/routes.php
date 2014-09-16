@@ -13,24 +13,22 @@
 
 Route::group(array('prefix' => 'users'), function() {
 
-    Route::post('/', 'UsersController@store');
+    Route::post('/', '\Api\Controllers\UsersController@store');
 
     Route::group(['prefix' => '/{userId}', ], function() {
 
-        Route::get('/', 'UsersController@show');
+        Route::get('/', '\Api\Controllers\UsersController@show');
 
         Route::group(['prefix' => '/todos'], function() {
 
-            Route::get('/', 'TodosController@index');
-            Route::post('/', 'TodosController@store');
-            Route::get('/{todoId}', 'TodosController@show');
-            Route::put('/{todoId}', 'TodosController@update');
-            Route::delete('/{todoId}', 'TodosController@destroy');
+            Route::get('/', '\Api\Controllers\TodosController@index');
+            Route::post('/', '\Api\Controllers\TodosController@store');
+            Route::get('/{todoId}', '\Api\Controllers\TodosController@show');
+            Route::put('/{todoId}', '\Api\Controllers\TodosController@update');
+            Route::delete('/{todoId}', '\Api\Controllers\TodosController@destroy');
 
         });
-
     });
-
 });
 
 Route::post('login', function() {
@@ -50,3 +48,4 @@ Route::post('login', function() {
 Route::get('auth', 'Tappleby\AuthToken\AuthTokenController@index');
 Route::post('auth', 'Tappleby\AuthToken\AuthTokenController@store');
 Route::delete('auth', 'Tappleby\AuthToken\AuthTokenController@destroy');
+

@@ -1,6 +1,32 @@
 <?php
+namespace Api\Controllers;
 
-class UsersController extends \BaseController {
+use Api\Models\User;
+use Company\Interfaces\User\UserRepositoryInterface;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
+
+/**
+ * Class UsersController
+ * @package Api\Controllers
+ */
+class UsersController extends \BaseController
+{
+
+    /**
+     * @var \Company\Interfaces\User\UserRepositoryInterface
+     */
+    protected $user;
+
+    /**
+     * @param UserRepositoryInterface $user
+     */
+    public function __construct(UserRepositoryInterface $user)
+    {
+        $this->user = $user;
+    }
 
     /**
      * Return the specified todo.
@@ -11,12 +37,12 @@ class UsersController extends \BaseController {
      */
     public function show($userId)
     {
-        $user = User::find($userId);
+        $user = $this->user->find($userId);
         if ($user) {
             return Response::make(json_encode($user), 200);
-        } else {
-            return $this->resourceNotFound();
         }
+
+        return $this->resourceNotFound();
     }
 
     /**
@@ -38,15 +64,10 @@ class UsersController extends \BaseController {
             $user->email = $input['email'];
             $user->password = Hash::make($input['password']);
             $user->save();
-            if (Auth::attempt(['email' => $input['email'], 'password' => $input['password']]))
-            {
-                $authToken = AuthToken::create(Auth::user());
-                $publicToken = AuthToken::publicToken($authToken);
-                return Response::make(json_encode(['user_id' => $user->id, 'auth_token' => $publicToken]), 200);
-            }
 
-        } else {
-            return Response::make(json_encode(['message' => 'The inputs email, which must be a unique valid email, and password are required.']), 400);
+            return Response::make(json_encode(['user_id' => $user->id]), 200);
         }
+
+        return Response::make(json_encode(['message' => 'The inputs email, which must be a unique valid email, and password are required.']), 400);
     }
 }

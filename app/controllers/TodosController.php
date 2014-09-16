@@ -1,6 +1,31 @@
 <?php
+namespace Api\Controllers;
 
-class TodosController extends \BaseController {
+use Api\Models\Todo;
+use Company\Interfaces\Todo\TodoRepositoryInterface;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
+
+/**
+ * Class TodosController
+ * @package Api\Controllers
+ */
+class TodosController extends \BaseController
+{
+
+    /**
+     * @var \Company\Interfaces\Todo\TodoRepositoryInterface
+     */
+    protected $todo;
+
+    /**
+     * @param TodoRepositoryInterface $todo
+     */
+    public function __construct(TodoRepositoryInterface $todo)
+    {
+        $this->todo = $todo;
+    }
 
 	/**
 	 * Display a listing of the todos.
@@ -11,7 +36,7 @@ class TodosController extends \BaseController {
 	 */
 	public function index($userId)
 	{
-        return Todo::where('user_id', '=', $userId)->orderBy('id', 'DESC')->get();
+        return $this->todo->findAllByUserId($userId);
 	}
 
 	/**
@@ -52,7 +77,7 @@ class TodosController extends \BaseController {
 	 */
 	public function show($userId, $todoId)
 	{
-        $todo = Todo::find($todoId);
+        $todo = $this->todo->find($todoId);
         if ($todo) {
             return Response::make(json_encode($todo), 200);
         } else {
@@ -70,14 +95,14 @@ class TodosController extends \BaseController {
 	 */
 	public function update($userId, $todoId)
 	{
-        $todo = Todo::find($todoId);
+        $todo = $this->todo->find($todoId);
         if ($todo) {
             $todo->title = Input::get('title', $todo->title);
             $todo->description = Input::get('description', $todo->description);
             $todo->save();
             return Response::make(json_encode($todo), 200);
         } else {
-            $this->resourceNotFound();
+            return $this->resourceNotFound();
         }
 	}
 
@@ -91,7 +116,7 @@ class TodosController extends \BaseController {
 	 */
 	public function destroy($userId, $todoId)
 	{
-        $todo = Todo::find($todoId);
+        $todo = $this->todo->find($todoId);
         if ($todo) {
             $todo->delete();
             return Response::make(['message' => 'Successfully deleted the todo with an id of ' . $todoId . '.'], 200);
@@ -100,9 +125,13 @@ class TodosController extends \BaseController {
         }
 	}
 
+    /**
+     * Create a resource not found message.
+     *
+     * @return Response
+     */
     public function resourceNotFound()
     {
         return Response::make(json_encode(['message' => 'Resource not found.']), 404);
     }
-
 }
