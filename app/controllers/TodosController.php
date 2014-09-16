@@ -20,6 +20,8 @@ class TodosController extends \BaseController
     protected $todo;
 
     /**
+     * Inject the TodoRepositoryInterface for SOLID goodness.
+     *
      * @param TodoRepositoryInterface $todo
      */
     public function __construct(TodoRepositoryInterface $todo)

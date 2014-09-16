@@ -21,6 +21,8 @@ class UsersController extends \BaseController
     protected $user;
 
     /**
+     * Inject the UserRepositoryInterface for SOLID goodness.
+     *
      * @param UserRepositoryInterface $user
      */
     public function __construct(UserRepositoryInterface $user)
