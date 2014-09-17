@@ -14,7 +14,7 @@ use Tappleby\Support\Facades\AuthToken;
  * Class UsersController
  * @package Api\Controllers
  */
-class UsersController extends \BaseController
+class UsersController extends BaseController
 {
 
     /**

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
  * Class TodosController
  * @package Api\Controllers
  */
-class TodosController extends \BaseController
+class TodosController extends BaseController
 {
 
     /**
@@ -29,27 +29,27 @@ class TodosController extends \BaseController
         $this->todo = $todo;
     }
 
-	/**
-	 * Display a listing of the todos.
-	 * GET /users/{userId}/todos
+    /**
+     * Display a listing of the todos.
+     * GET /users/{userId}/todos
      *
-	 * @param  int  $userId
-	 * @return Response
-	 */
-	public function index($userId)
-	{
-        return $this->todo->findAllByUserId($userId);
-	}
-
-	/**
-	 * Store a newly created todo.
-	 * POST /users/{userId}/todos
-	 *
      * @param  int  $userId
-	 * @return Response
-	 */
-	public function store($userId)
-	{
+     * @return Response
+     */
+    public function index($userId)
+    {
+        return $this->todo->findAllByUserId($userId);
+    }
+
+    /**
+     * Store a newly created todo.
+     * POST /users/{userId}/todos
+     *
+     * @param  int  $userId
+     * @return Response
+     */
+    public function store($userId)
+    {
         $input = Input::all();
         $validator = Validator::make($input, [
             'title' => 'required'
@@ -67,36 +67,36 @@ class TodosController extends \BaseController
         } else {
             return Response::make(json_encode(['message' => 'The input title is required.']), 400);
         }
-	}
+    }
 
-	/**
-	 * Return the specified todo.
-	 * GET /users/{userId}/todos/{todoId}
-	 *
-	 * @param  int  $userId
+    /**
+     * Return the specified todo.
+     * GET /users/{userId}/todos/{todoId}
+     *
+     * @param  int  $userId
      * @param  int  $todoId
-	 * @return Response
-	 */
-	public function show($userId, $todoId)
-	{
+     * @return Response
+     */
+    public function show($userId, $todoId)
+    {
         $todo = $this->todo->find($todoId);
         if ($todo) {
             return Response::make(json_encode($todo), 200);
         } else {
             return $this->resourceNotFound();
         }
-	}
+    }
 
-	/**
-	 * Update the specified todo.
-	 * PUT /users/{userId}/todos/{todoId}
-	 *
+    /**
+     * Update the specified todo.
+     * PUT /users/{userId}/todos/{todoId}
+     *
      * @param  int  $userId
      * @param  int  $todoId
-	 * @return Response
-	 */
-	public function update($userId, $todoId)
-	{
+     * @return Response
+     */
+    public function update($userId, $todoId)
+    {
         $todo = $this->todo->find($todoId);
         if ($todo) {
             $todo->title = Input::get('title', $todo->title);
@@ -106,18 +106,18 @@ class TodosController extends \BaseController
         } else {
             return $this->resourceNotFound();
         }
-	}
+    }
 
-	/**
-	 * Remove the specified todo.
-	 * DELETE /users/{userId}/todos/{todoId}
-	 *
+    /**
+     * Remove the specified todo.
+     * DELETE /users/{userId}/todos/{todoId}
+     *
      * @param  int  $userId
      * @param  int  $todoId
-	 * @return Response
-	 */
-	public function destroy($userId, $todoId)
-	{
+     * @return Response
+     */
+    public function destroy($userId, $todoId)
+    {
         $todo = $this->todo->find($todoId);
         if ($todo) {
             $todo->delete();
@@ -125,7 +125,7 @@ class TodosController extends \BaseController
         } else {
             return $this->resourceNotFound();
         }
-	}
+    }
 
     /**
      * Create a resource not found message.
